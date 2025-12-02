@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ event.title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ event.title }}</h1>
+    
+    <div style="background: #f9f9f9; padding: 20px; border-radius: 8px;">
+        <p><strong>👤 برگزارکننده:</strong> {{ event.organizer.username }}</p>
+        <p><strong>⏰ زمان:</strong> {{ event.event_time }}</p>
+        <p><strong>📍 مکان:</strong> {{ event.location }}</p>
+        <p><strong>👥 ظرفیت:</strong> {{ event.capacity|default:"نامحدود" }}</p>
+        
+        <hr>
+        <h3>توضیحات:</h3>
+        <p>{{ event.description }}</p>
+        
+        <div style="margin-top: 30px; text-align: center;">
+            <h2 style="color: #28a745;">
+                {% if event.price == 0 %}رایگان{% else %}{{ event.price }} تومان{% endif %}
+            </h2>
+            
+            <a href="{% url 'tickets:purchase' event.pk %}" style="text-decoration: none;">
+                <button style="background-color: green; color: white; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;">
+                    خرید بلیط / ثبت نام
+                </button>
+            </a>
+        </div>
+    </div>
+    
+    <br>
+    <a href="{% url 'events:list' %}">⬅️ بازگشت به لیست</a>
+{% endblock %}

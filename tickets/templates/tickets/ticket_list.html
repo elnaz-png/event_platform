@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}بلیط‌های من{% endblock %}
+
+{% block content %}
+    <h1>🎟️ بلیط‌های خریداری شده من</h1>
+    <hr>
+
+    {% if tickets %}
+        <div style="display: grid; gap: 20px;">
+            {% for ticket in tickets %}
+                <div style="border: 1px solid #ddd; padding: 20px; border-radius: 8px; background-color: #fff; border-right: 5px solid #007bff;">
+                    
+                    <div style="display: flex; justify-content: space-between;">
+                        <h2 style="margin: 0;">{{ ticket.event.title }}</h2>
+                        <span style="background: #eee; padding: 5px 10px; border-radius: 4px; font-family: monospace;">
+                            کد بلیط: {{ ticket.ticket_code }}
+                        </span>
+                    </div>
+
+                    <p style="color: #555; margin-top: 10px;">
+                        ⏰ <strong>زمان رویداد:</strong> {{ ticket.event.event_time|date:"Y/m/d H:i" }}
+                    </p>
+                    
+                    <p>
+                        📍 <strong>مکان:</strong> {{ ticket.event.location }}
+                    </p>
+
+                    <div style="margin-top: 15px; padding-top: 10px; border-top: 1px dashed #ccc; display: flex; justify-content: space-between;">
+                        <span>👤 تعداد نفرات: <strong>{{ ticket.quantity }}</strong></span>
+                        <span>💰 مبلغ پرداخت شده: <strong>{{ ticket.final_price }} تومان</strong></span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div style="text-align: center; padding: 50px;">
+            <p>شما هنوز هیچ بلیطی خریداری نکرده‌اید.</p>
+            <a href="{% url 'events:list' %}" style="background-color: green; color: white; padding: 10px 20px; border-radius: 5px;">
+                مشاهده رویدادها و خرید بلیط
+            </a>
+        </div>
+    {% endif %}
+{% endblock %}

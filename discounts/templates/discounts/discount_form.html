@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}ایجاد کد تخفیف{% endblock %}
+
+{% block content %}
+    <h1>ایجاد کد تخفیف جدید</h1>
+    <h3 style="color: #666;">برای رویداد: {{ event.title }}</h3>
+    <hr>
+    
+    <div style="max-width: 500px;">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            
+            <button type="submit" style="background-color: blue; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+                ذخیره کد تخفیف
+            </button>
+            <a href="{% url 'events:dashboard' event.pk %}" style="margin-right: 15px;">انصراف</a>
+        </form>
+    </div>
+{% endblock %}

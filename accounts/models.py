@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     class UserType(models.TextChoices):
         ORGANIZER = 'ORGANIZER', 
-        ATTENDEE = 'ATTENDEE', 
+        ATTENDER = 'ATTENDER', 
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     user_type = models.CharField(max_length=20, choices=UserType.choices, verbose_name= 'user type')

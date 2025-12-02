@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}سامانه فروش بلیط رویداد{% endblock %}</title>
+    <style>
+        body { 
+            font-family: Tahoma, Arial, sans-serif; 
+            padding: 0;
+            margin: 0;
+            background-color: #fcfcfc; 
+            min-height: 100vh;
+        }
+        a { text-decoration: none; color: #007bff; }
+        
+        /* استایل نوبار (منوی بالا) */
+        .navbar { 
+            background-color: #333; 
+            overflow: hidden; 
+            padding: 10px 20px; 
+            color: white; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a { 
+            color: white; 
+            text-align: center; 
+            padding: 8px 15px; 
+            text-decoration: none; 
+            font-size: 14px; 
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+        .navbar a:hover { background-color: #555; }
+        
+        .navbar-right { display: flex; align-items: center; }
+        .navbar-left { float: left; display: flex; align-items: center; }
+
+        /* استایل پیام‌ها */
+        .message { 
+            padding: 15px; 
+            margin: 20px 20px 0 20px;
+            color: white; 
+            border-radius: 4px;
+        }
+        .success { background-color: #28a745; }
+        .error { background-color: #dc3545; }
+        
+        /* فضای اصلی محتوا */
+        .container { 
+            background-color: white; 
+            padding: 20px; 
+            margin: 20px;
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="navbar-right">
+            <a href="{% url 'events:list' %}">🏠 صفحه اصلی</a>
+            
+            {% if user.is_authenticated %}
+                
+                <a href="{% url 'tickets:list' %}" style="background-color: #ff9800; margin-left: 20px;">🎫 بلیط‌های من</a>
+
+                {% if user.profile.user_type == 'ORGANIZER' %}
+    
+                     <a href="{% url 'events:my_events' %}" style="background-color: #6610f2; margin-left: 10px;">📂 رویدادهای من</a>
+    
+                    <a href="{% url 'events:create' %}" style="background-color: #0056b3;">+ ایجاد رویداد</a>
+
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <div class="navbar-left">
+            {% if user.is_authenticated %}
+                <span style="padding: 12px; color: #ccc;">👤 {{ user.username }}</span>
+                <form action="{% url 'accounts:logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" style="background: none; border: none; color: #ff6b6b; cursor: pointer; padding: 0 15px;">خروج</button>
+                </form>
+            {% else %}
+                <a href="{% url 'accounts:login' %}">ورود</a>
+                <a href="{% url 'accounts:signup' %}">ثبت نام</a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>

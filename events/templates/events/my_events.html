@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}رویدادهای من{% endblock %}
+
+{% block content %}
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>📂 رویدادهای ایجاد شده توسط من</h1>
+        <a href="{% url 'events:create' %}" style="background-color: blue; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;">
+            + ایجاد رویداد جدید
+        </a>
+    </div>
+    <hr>
+
+    {% if events %}
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+            <thead>
+                <tr style="background-color: #f2f2f2; text-align: center;">
+                    <th style="padding: 10px; border: 1px solid #ddd;">عنوان</th>
+                    <th style="padding: 10px; border: 1px solid #ddd;">وضعیت</th>
+                    <th style="padding: 10px; border: 1px solid #ddd;">زمان برگزاری</th>
+                    <th style="padding: 10px; border: 1px solid #ddd;">فروش</th>
+                    <th style="padding: 10px; border: 1px solid #ddd;">عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                    <tr style="text-align: center;">
+                        <td style="padding: 10px; border: 1px solid #ddd;">
+                            <strong>{{ event.title }}</strong>
+                        </td>
+                        
+                        <td style="padding: 10px; border: 1px solid #ddd;">
+                            {% if event.status == 'PUBLISHED' %}
+                                <span style="color: green;">منتشر شده ✅</span>
+                            {% elif event.status == 'DRAFT' %}
+                                <span style="color: orange;">پیش‌نویس 📝</span>
+                            {% else %}
+                                <span style="color: red;">لغو شده ❌</span>
+                            {% endif %}
+                        </td>
+                        
+                        <td style="padding: 10px; border: 1px solid #ddd;">
+                            {{ event.event_time|date:"Y/m/d H:i" }}
+                        </td>
+
+                        <td style="padding: 10px; border: 1px solid #ddd;">
+                            <a href="{% url 'events:dashboard' event.pk %}" style="color: purple; font-weight: bold;">
+                                📊 مشاهده آمار
+                            </a>
+                        </td>
+
+                        <td style="padding: 10px; border: 1px solid #ddd;">
+                            <a href="{% url 'events:update' event.pk %}" style="color: #ffc107; margin-left: 10px;">✏️ ویرایش</a>
+                            <a href="{% url 'events:delete' event.pk %}" style="color: red;">🗑️ حذف</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div style="text-align: center; padding: 50px;">
+            <p>شما هنوز هیچ رویدادی ایجاد نکرده‌اید.</p>
+        </div>
+    {% endif %}
+{% endblock %}

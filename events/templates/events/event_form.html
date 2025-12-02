@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>ایجاد رویداد جدید</title>
+</head>
+<body>
+    <h1>تعریف رویداد جدید</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+        
+        <button type="submit" style="background-color: blue; color: white; padding: 10px;">
+            ذخیره رویداد
+        </button>
+    </form>
+    
+    <br>
+    <a href="{% url 'events:list' %}">انصراف و بازگشت</a>
+</body>
+</html>

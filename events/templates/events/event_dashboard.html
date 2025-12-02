@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>داشبورد: {{ event.title }}</title>
+    <style>
+        body { font-family: Tahoma, Arial; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        .stat-box { display: inline-block; width: 200px; padding: 20px; background: #e8f4f8; margin-left: 20px; text-align: center; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h1>مدیریت رویداد: {{ event.title }}</h1>
+    <a href="{% url 'events:detail' event.pk %}">مشاهده صفحه رویداد</a> | 
+    <a href="{% url 'events:list' %}">بازگشت به لیست</a>
+    
+    <hr>
+    <h1>مدیریت رویداد: {{ event.title }}</h1>
+    
+    <div style="margin: 20px 0;">
+        <a href="{% url 'events:update' event.pk %}" style="background-color: #ffc107; color: black; padding: 8px 15px; border-radius: 5px; text-decoration: none;">
+            ✏️ ویرایش رویداد
+        </a>
+        
+        <a href="{% url 'events:delete' event.pk %}" style="background-color: #dc3545; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; margin-right: 10px;">
+            🗑️ حذف رویداد
+        </a>
+    </div>
+
+    <hr>
+    <div>
+        <div class="stat-box">
+            <h3>تعداد بلیط فروخته شده</h3>
+            <p style="font-size: 24px; font-weight: bold;">{{ total_sold }}</p>
+        </div>
+        <div class="stat-box">
+            <h3>درآمد کل</h3>
+            <p style="font-size: 24px; font-weight: bold;">{{ total_revenue }} تومان</p>
+        </div>
+    </div>
+
+    <h2>لیست شرکت‌کنندگان</h2>
+    {% if tickets %}
+        <table>
+            <thead>
+                <tr>
+                    <th>نام خریدار</th>
+                    <th>تعداد نفرات</th>
+                    <th>مبلغ پرداختی</th>
+                    <th>زمان خرید</th>
+                    <th>کد بلیط</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                    <tr>
+                        <td>{{ ticket.buyer.username }}</td>
+                        <td>{{ ticket.quantity }}</td>
+                        <td>{{ ticket.final_price }} تومان</td>
+                        <td>{{ ticket.registered_at|date:"Y/m/d H:i" }}</td>
+                        <td style="font-family: monospace;">{{ ticket.ticket_code }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>هنوز بلیطی برای این رویداد فروخته نشده است.</p>
+    {% endif %}
+    <hr style="margin: 40px 0;">
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>🏷️ کدهای تخفیف این رویداد</h2>
+        <a href="{% url 'discounts:create' event.pk %}" style="background-color: #17a2b8; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none;">
+            + افزودن کد تخفیف جدید
+        </a>
+    </div>
+
+    {% if event.discount_codes.all %}
+        <table>
+            <thead>
+                <tr>
+                    <th>کد</th>
+                    <th>درصد</th>
+                    <th>وضعیت</th>
+                    <th>محدودیت استفاده</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for discount in event.discount_codes.all %}
+                    <tr>
+                        <td style="font-weight: bold; font-family: monospace; font-size: 1.1em;">{{ discount.code }}</td>
+                        <td>{{ discount.percent }}%</td>
+                        <td>
+                            {% if discount.is_active %}
+                                <span style="color: green;">فعال ✅</span>
+                            {% else %}
+                                <span style="color: red;">غیرفعال ❌</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ discount.usage_limit|default:"نامحدود" }}</td>
+                        <td>
+                            <a href="{% url 'discounts:delete' discount.pk %}" style="color: red; font-size: 0.9em;">حذف</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p style="background-color: #f9f9f9; padding: 10px; border-radius: 5px;">هیچ کد تخفیفی برای این رویداد تعریف نشده است.</p>
+    {% endif %}
+
+</body>
+</html>

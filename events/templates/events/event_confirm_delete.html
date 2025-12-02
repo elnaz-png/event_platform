@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}حذف رویداد{% endblock %}
+
+{% block content %}
+    <div style="max-width: 600px; margin: 50px auto; text-align: center; border: 1px solid #ffcccc; padding: 20px; border-radius: 10px; background-color: #fff5f5;">
+        <h2 style="color: red;">⚠️ حذف رویداد</h2>
+        <p>آیا مطمئن هستید که می‌خواهید رویداد <strong>"{{ event.title }}"</strong> را حذف کنید؟</p>
+        <p style="font-size: 0.9em; color: #666;">این عملیات غیرقابل بازگشت است و تمام بلیط‌های فروخته شده هم حذف خواهند شد.</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" style="background-color: red; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 5px;">
+                بله، حذف کن
+            </button>
+            <a href="{% url 'events:dashboard' event.pk %}" style="margin-right: 20px; color: #333;">انصراف</a>
+        </form>
+    </div>
+{% endblock %}

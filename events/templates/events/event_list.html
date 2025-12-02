@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}لیست رویدادها{% endblock %}
+
+{% block content %}
+    <h1>رویدادهای پیش رو</h1>
+    <div style="margin-bottom: 30px; padding: 15px; background-color: #f8f9fa; border-radius: 5px; border: 1px solid #e9ecef;">
+        <form method="get" action="." style="display: flex; gap: 10px;">
+            <input 
+                type="text" 
+                name="q" 
+                value="{{ search_query|default:'' }}" 
+                placeholder="جستجوی نام رویداد..." 
+                style="flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"
+            >
+            <button type="submit" style="background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+                🔍 جستجو
+            </button>
+            
+            {% if search_query %}
+                <a href="{% url 'events:list' %}" style="padding: 10px; color: #dc3545; text-decoration: none; align-self: center;">
+                    ❌ لغو
+                </a>
+            {% endif %}
+        </form>
+    </div>
+    <hr>
+    
+    {% if events %}
+        <ul style="list-style: none; padding: 0;">
+            {% for event in events %}
+                <li style="border: 1px solid #eee; margin-bottom: 10px; padding: 15px; border-radius: 5px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <a href="{% url 'events:detail' event.pk %}">
+                            <h2 style="margin: 0; color: #333;">{{ event.title }}</h2>
+                        </a>
+                        
+                        {% if user == event.organizer %}
+                            <a href="{% url 'events:dashboard' event.pk %}" style="font-size: 0.9em; color: purple;">
+                                📊 مدیریت رویداد
+                            </a>
+                        {% endif %}
+                    </div>
+                    
+                    <p style="color: #666; margin: 5px 0;">
+                        📅 {{ event.event_time|date:"Y/m/d H:i" }} | 📍 {{ event.location }}
+                    </p>
+                    
+                    <p style="font-weight: bold; color: green;">
+                        {% if event.price == 0 %}رایگان{% else %}{{ event.price }} تومان{% endif %}
+                    </p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>هنوز رویدادی منتشر نشده است.</p>
+    {% endif %}
+{% endblock %}
