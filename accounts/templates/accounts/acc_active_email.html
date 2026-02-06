@@ -1,0 +1,4 @@
+کاربر گرامی {{ user.username }}،
+لطفاً برای فعال‌سازی حساب خود روی لینک زیر کلیک کنید:
+
+http://{{ domain }}{% url 'accounts:activate' uidb64=uid token=token %}

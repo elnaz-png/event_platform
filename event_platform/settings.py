@@ -135,5 +135,79 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Email (development: console backend by default)
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'webmaster@localhost')
+# 1. موتور ارسال ایمیل را روی SMTP تنظیم می‌کنیم
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# 2. آدرس سرور گوگل
+EMAIL_HOST = 'smtp.gmail.com'
+
+# 3. پورت ارتباطی (برای TLS معمولا 587 است)
+EMAIL_PORT = 587
+
+# 4. استفاده از رمزنگاری امن
+EMAIL_USE_TLS = True
+
+# 5. ایمیل خودتان (فرستنده)
+EMAIL_HOST_USER = 'elnazmno@gmail.com'  # 👈 ایمیل خودتان را اینجا بنویسید
+
+# 6. رمز عبور برنامه (همان کد 16 رقمی که از گوگل گرفتید)
+EMAIL_HOST_PASSWORD = 'nenb bxav vkzl rcrb'  # 👈 رمز 16 رقمی را اینجا بگذارید
+
+
+
+# تنظیمات لاگ‌نویسی (Logging)
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log', # نام فایلی که لاگ‌ها در آن ذخیره می‌شوند
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        # تنظیمات لاگر برای اپلیکیشن‌های خودمان
+        'events': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'accounts': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'tickets': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+         'discounts': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}

@@ -59,38 +59,8 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-
-    <div class="navbar">
-        <div class="navbar-right">
-            <a href="{% url 'events:list' %}">🏠 صفحه اصلی</a>
-            
-            {% if user.is_authenticated %}
-                
-                <a href="{% url 'tickets:list' %}" style="background-color: #ff9800; margin-left: 20px;">🎫 بلیط‌های من</a>
-
-                {% if user.profile.user_type == 'ORGANIZER' %}
     
-                     <a href="{% url 'events:my_events' %}" style="background-color: #6610f2; margin-left: 10px;">📂 رویدادهای من</a>
-    
-                    <a href="{% url 'events:create' %}" style="background-color: #0056b3;">+ ایجاد رویداد</a>
-
-                {% endif %}
-            {% endif %}
-        </div>
-
-        <div class="navbar-left">
-            {% if user.is_authenticated %}
-                <span style="padding: 12px; color: #ccc;">👤 {{ user.username }}</span>
-                <form action="{% url 'accounts:logout' %}" method="post" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit" style="background: none; border: none; color: #ff6b6b; cursor: pointer; padding: 0 15px;">خروج</button>
-                </form>
-            {% else %}
-                <a href="{% url 'accounts:login' %}">ورود</a>
-                <a href="{% url 'accounts:signup' %}">ثبت نام</a>
-            {% endif %}
-        </div>
-    </div>
+    {% include 'inc/navbar.html' %}
 
     {% if messages %}
         {% for message in messages %}

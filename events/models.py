@@ -2,6 +2,15 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+class EventManager(models.Manager):
+    def published(self):
+        # فقط رویدادهایی که وضعیتشان PUBLISHED است را برمی‌گرداند
+        return self.get_queryset().filter(status='PUBLISHED')
+
+    def open_for_registration(self):
+        # رویدادهای منتشر شده که هنوز ظرفیت دارند
+        return self.published().filter(capacity__gt=models.Count('tickets'))
+
 
 class Event(models.Model):
     class EventStatus(models.TextChoices):
@@ -32,6 +41,9 @@ class Event(models.Model):
 
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
+
+    objects = models.Manager() # منیجر پیش‌فرض
+    published_objects = EventManager() # منیجر جدید ما
 
     def __str__(self):
         return self.title

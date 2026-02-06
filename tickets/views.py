@@ -7,6 +7,9 @@ from .models import Ticket
 from .forms import TicketForm
 from discounts.models import DiscountCode
 from payments.models import Transaction
+import logging
+
+logger = logging.getLogger(__name__)
 
 @login_required
 def ticket_purchase(request, event_id):
@@ -64,6 +67,8 @@ def ticket_purchase(request, event_id):
                 status=Transaction.TransactionStatus.SUCCESS, 
                 tracking_code=f"TRX-{timezone.now().timestamp()}" 
             )
+            
+            logger.info(f"Ticket purchased: User {request.user.username} bought {quantity} tickets for event {event.title}. code: {ticket.ticket_code}")
 
             messages.success(request, f"خرید با موفقیت انجام شد! کد بلیط شما: {ticket.ticket_code}")
             return redirect('events:list') 
