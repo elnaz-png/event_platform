@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
+from decouple import config
 from dotenv import load_dotenv
 load_dotenv() 
 
@@ -135,26 +136,20 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Email (development: console backend by default)
-# 1. موتور ارسال ایمیل را روی SMTP تنظیم می‌کنیم
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-# 2. آدرس سرور گوگل
+# آدرس سرور گوگل
 EMAIL_HOST = 'smtp.gmail.com'
 
-# 3. پورت ارتباطی (برای TLS معمولا 587 است)
+# پورت ارتباطی 
 EMAIL_PORT = 587
 
-# 4. استفاده از رمزنگاری امن
+#استفاده از رمزنگاری امن
 EMAIL_USE_TLS = True
 
-# 5. ایمیل خودتان (فرستنده)
-EMAIL_HOST_USER = 'elnazmno@gmail.com'  # 👈 ایمیل خودتان را اینجا بنویسید
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 
-# 6. رمز عبور برنامه (همان کد 16 رقمی که از گوگل گرفتید)
-EMAIL_HOST_PASSWORD = 'nenb bxav vkzl rcrb'  # 👈 رمز 16 رقمی را اینجا بگذارید
-
-
-
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 # تنظیمات لاگ‌نویسی (Logging)
 LOGGING = {
     'version': 1,
