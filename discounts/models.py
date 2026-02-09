@@ -2,6 +2,11 @@
 from django.db import models
 from events.models import Event 
 
+class DiscountManager(models.Manager):
+    def active(self):
+        return self.filter(is_active=True)
+
+
 class DiscountCode(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='discount_codes')
     code = models.CharField(max_length=50, unique=True, verbose_name='کد')
@@ -10,6 +15,9 @@ class DiscountCode(models.Model):
     is_active = models.BooleanField(default=True, verbose_name='فعال')
     
     usage_limit = models.PositiveIntegerField(null=True, blank=True, verbose_name='محدودیت استفاده')
+    
+    objects = models.Manager()       
+    custom_objects = DiscountManager()
 
     def __str__(self):
          return f"{self.code} - {self.percent}%"

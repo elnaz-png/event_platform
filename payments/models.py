@@ -2,6 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from tickets.models import Ticket
 
+class TransactionManager(models.Manager):
+    def successful(self):
+        return self.filter(status='SUCCESS')
+
+
 class Transaction(models.Model):
     class TransactionStatus(models.TextChoices):
         SUCCESS = 'SUCCESS', 'موفق'
@@ -20,6 +25,9 @@ class Transaction(models.Model):
     
     
     tracking_code = models.CharField(max_length=100, blank=True, null=True, verbose_name='کد رهگیری')
+    
+    objects = models.Manager()           
+    custom_objects = TransactionManager()
 
     def __str__(self):
         return f"تراکنش {self.id} - {self.get_status_display()}"

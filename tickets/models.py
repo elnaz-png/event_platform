@@ -5,6 +5,15 @@ from discounts.models import DiscountCode
 import uuid
 from django.utils import timezone
 
+
+class TicketManager(models.Manager):
+    def for_user(self, user):
+        return self.filter(buyer=user)
+
+    def for_event(self, event):
+        return self.filter(event=event)
+
+
 class Ticket(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tickets')
     buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tickets')
